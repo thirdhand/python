@@ -8,10 +8,11 @@ from ttk import *
 
 class Main(Frame):
     turn = 0
+    turns_left = 0
     houses = 0
     buildings_names = ""
     building_queue = ""
-    test = "Global test"
+    currently_building = ["Placeholder building", 0]
     
     
     
@@ -43,10 +44,15 @@ class Main(Frame):
         saved_playername = StringVar()
         playername = StringVar()
         turn_number = StringVar()
+        turn_number.set("Turn %s" % self.turn)
+        
         houses_number = StringVar()
         buildings = StringVar()
         building_queueStringVar = StringVar()
         time_leftStringVar = StringVar()
+        turns_leftStringVar = StringVar()
+        #time_leftMethod = time_left
+        
         
         self.columnconfigure(0, pad = 2)
         self.columnconfigure(1, pad = 4)
@@ -86,10 +92,21 @@ class Main(Frame):
         emptylabel.grid(row = 2, column = 8)
         
         def run_simulation():
-            if self.turn != 10:
+            if self.turn < 25:
+                self.turn += 1
                 turn_number.set("Turn %s" % self.turn)
                 print "Turn", self.turn
-                self.turn += 1
+                if self.turns_left > 1:
+                    self.turns_left -= 1
+                    print "Turns left: ", self.turns_left
+                    turns_leftStringVar.set(self.turns_left)
+                    print "Set turns left to", turns_leftStringVar.get()
+                elif self.turns_left == 1:
+                    self.turns_left = 0
+                    turns_leftStringVar.set("Built %s" % self.currently_building[0])
+                    self.currently_building[1] += 1
+                    houses_number.set("%ss: %s" % (self.currently_building[0], self.currently_building[1]))
+                    print "No more turns left!"
         
         def save_playername(*args):
             saving_name = str(playername.get())
@@ -119,10 +136,17 @@ class Main(Frame):
                 ##print time.time()
                 ##print seconds
                 #seconds -= 1
-            print seconds_left
-            #time_leftStringVar.set(0)
-            print "Finished"
+            #print seconds_left
+            ##time_leftStringVar.set(0)
+            #print "Finished"
             #return str_sec_from_epoch
+
+        def set_turns_left(turn_amount = 0):
+            self.turns_left = turn_amount
+            current_turn = self.turn
+            if self.turns_left != 0:
+                turns_leftStringVar.set(self.turns_left)
+                print "Turns left: ", turns_leftStringVar.get()
 
         def add_buildings(*args):
             selection = buildingsListbox.curselection()
@@ -130,24 +154,22 @@ class Main(Frame):
             if len(selection) == 1:
                 #print buildings_list[selection_id]
                 #print "buildings_list index: %s" % buildings_list.index(buildings_list[selection_id])
+                self.building_queue += "{%s}\n" % (buildings_list[selection_id])
+                self.currently_building[0] = buildings_list[selection_id]
                 if buildings_list[selection_id] == "House":
-                    self.houses += 1
-                    houses_number.set("Houses: %s" % self.houses)
-                    #print "Houses: ", self.houses
-                    #print "Built %s" % buildings_list[selection_id]
-                    saved_playername.set("Built %s" % buildings_list[selection_id])
-                    self.building_queue += "{%s}\n" % (buildings_list[selection_id])
+                    #self.building_queue += "{%s}\n" % (buildings_list[selection_id])
                     building_queueStringVar.set(self.building_queue)
-                    main.time_left(5)
+                    set_turns_left(5)
+                    #saved_playername.set("Building %s" % buildings_list[selection_id])
+                elif buildings_list[selection_id] == "Air purifier":
+                    #self.building_queue += "{%s}\n" % (buildings_list[selection_id])
+                    building_queueStringVar.set(self.building_queue)
+                    set_turns_left(6)
                 #print self.building_queue
                 
         #def set_time_left():
             #time_leftStringVar.set(time_left(100))
             #print time_leftStringVar.get()
-        
-        #Initialization of functions. Otherwise the labels won't show up until the corresponding button is used.
-        run_simulation()
-        #add_buildings()
         
         #print time_left(3)
         
@@ -170,7 +192,8 @@ class Main(Frame):
         buildingsListbox = Listbox(self, height = 13, listvariable = buildings)
         resources = Labelframe(self, text = "Resources", labelanchor = "nw", width = 150, height = 100)
         buildingsLabelframe = Labelframe(self, text = "Buildings", width = 100, height = 200)
-        time_leftLabel = Label(self, textvariable = time_leftStringVar)
+        #time_leftLabel = Label(self, textvariable = time_leftStringVar)
+        turns_leftLabel = Label(self, textvariable = turns_leftStringVar)
         
         houses_number.set("Houses: %s" % self.houses)
         housesLabel = Label(self, textvariable = houses_number)
@@ -204,7 +227,8 @@ class Main(Frame):
         error_playername.grid_remove()
         saved_name.grid(row = 8, column = 0, sticky = W)
         building_queueListbox.grid(row = 2, column = 0, sticky = W)
-        time_leftLabel.grid(row = 2, column = 1, sticky = W)
+        #time_leftLabel.grid(row = 2, column = 1, sticky = W)
+        turns_leftLabel.grid(row = 3, column = 0, sticky = W)
    
         
    
@@ -212,16 +236,16 @@ def main():
     root = Tk()
     app = Main(root)
     root.mainloop()
-    def time_left(seconds):
-        seconds_left = []
-        while seconds:
-            building_queueStringVar.set(self.building_queue)
-            sec_from_epoch = int(round(time.time() * 1000000))
-            str_sec_from_epoch = str(sec_from_epoch)[8:10]
-            if str_sec_from_epoch not in seconds_left:
-                seconds_left.append(str_sec_from_epoch)
-                time_leftStringVar.set(str_sec_from_epoch)
-                seconds -= 1
+#def time_left(seconds):
+    #seconds_left = []
+    #while seconds:
+        #Main.content.building_queueStringVar.set(self.building_queue)
+        #sec_from_epoch = int(round(time.time() * 1000000))
+        #str_sec_from_epoch = str(sec_from_epoch)[8:10]
+        #if str_sec_from_epoch not in seconds_left:
+            #seconds_left.append(str_sec_from_epoch)
+            #time_leftStringVar.set(str_sec_from_epoch)
+            #seconds -= 1
     
 
 
