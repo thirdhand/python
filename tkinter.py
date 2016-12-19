@@ -10,6 +10,7 @@ class Main(Frame):
     turn = 0
     turns_left = 0
     houses = 0
+    House = 0
     buildings_names = ""
     building_queue = ""
     currently_building = ["Placeholder building", 0]
@@ -41,6 +42,8 @@ class Main(Frame):
         
         
     def content(self):
+        print self.currently_building
+        
         saved_playername = StringVar()
         playername = StringVar()
         turn_number = StringVar()
@@ -104,6 +107,8 @@ class Main(Frame):
                 elif self.turns_left == 1:
                     self.turns_left = 0
                     turns_leftStringVar.set("Built %s" % self.currently_building[0])
+                    #print "%s" % type(self[self.currently_building])
+                    #self[self.currently_building[1]] = 1
                     self.currently_building[1] += 1
                     houses_number.set("%ss: %s" % (self.currently_building[0], self.currently_building[1]))
                     print "No more turns left!"
