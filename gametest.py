@@ -197,8 +197,8 @@ class GameLogic():
             self.saved_playernameStringVar.set(saving_name)
             error_playernameLabel.grid_remove()
         else:
-            error_playername.grid()
-            saved_name.grid_remove()
+            error_playernameLabel.grid()
+            saved_nameLabel.grid_remove()
                 
     def set_turns_left(self, turn_amount = 0):
         self.turns_left = turn_amount
