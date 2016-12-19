@@ -1,6 +1,6 @@
 from datetime import datetime
-from Tkinter import *
-from ttk import *
+from tkinter import *
+from tkinter import ttk
 
 
 class Init():
@@ -12,14 +12,19 @@ class Init():
     
 class GUI(Frame):
     def __init__(self, parent):
-        Frame.__init__(self, parent)
+        Frame.__init__(self, parent, background = "#d9d9d9")
         self.parent = parent
+        self.style = ttk.Style()
+        self.style.theme_use("default")
+        #self.style.configure("TButton", padding = (0, 2, 0, 0), font = "TkFixedFont")
+        
         self.initUI()
         self.gamelogic = GameLogic()
         
-        self.buildingsListbox = Listbox(self, height = 13, listvariable = self.gamelogic.buildingsStringVar)
-        self.saved_nameLabel = Label(self, textvariable = self.gamelogic.saved_playernameStringVar)
-        self.error_playernameLabel = Label(self, foreground = "red", text = "Invalid name!")
+        self.buildingsListbox = Listbox(self, height = 13, background = "white", listvariable = self.gamelogic.buildingsStringVar)
+        self.nameentry = ttk.Entry(self, textvariable = self.gamelogic.playernameStringVar)
+        self.saved_nameLabel = ttk.Label(self, textvariable = self.gamelogic.saved_playernameStringVar)
+        self.error_playernameLabel = ttk.Label(self, foreground = "red", text = "Invalid name!")
         
         self.UI_configuration()
     
@@ -73,30 +78,25 @@ class GUI(Frame):
 
         
         #Creating UI elements and setting their parameters.
-        self.style = Style()
-        self.style.theme_use("default")
-        Style().configure("TButton", padding = (0, 2, 0, 0), font = "TkFixedFont")
         
-        add_buildingsLabel = Label(self, text = "Add building")
-        nameentry = Entry(self, textvariable = self.gamelogic.playernameStringVar)
-        nameentry.focus()
-        button1 = Button(self, text = "Save name", command = self.gamelogic.save_playername)
-        button2 = Button(self, text = "Button 2")
-        button3 = Button(self, text = "Build house", command = self.gamelogic.add_buildings)
-        button4 = Button(self, text = "End turn", command = self.gamelogic.run_simulation)
-        button5 = Button(self, text = "time_left")
-        button5.grid(row = 9, column = 7)
-        quitButton = Button(self, text = "Quit", command = self.quit)
+        add_buildingsLabel = ttk.Label(self, text = "Add building")
+        
+        button1 = ttk.Button(self, text = "Save name", command = self.save_playername)
+        button2 = ttk.Button(self, text = "Button 2")
+        button3 = ttk.Button(self, text = "Build house", command = self.add_buildings)
+        button4 = ttk.Button(self, text = "End turn", command = self.gamelogic.run_simulation)
+        quitButton = ttk.Button(self, text = "Quit", command = self.quit)
         
         
-        resources = Labelframe(self, text = "Resources", labelanchor = "nw", width = 150, height = 100)
-        buildingsLabelframe = Labelframe(self, text = "Buildings", width = 100, height = 200)
+        resources = ttk.Labelframe(self, text = "Resources", labelanchor = "nw", width = 150, height = 100)
+        buildingsLabelframe = ttk.Labelframe(self, text = "Buildings", width = 100, height = 200)
         #time_leftLabel = Label(self, textvariable = time_leftStringVar)
-        turns_leftLabel = Label(self, textvariable = self.gamelogic.turns_leftStringVar)
+        turns_leftLabel = ttk.Label(self, textvariable = self.gamelogic.turns_leftStringVar)
         
-        housesLabel = Label(self, textvariable = self.gamelogic.houses_numberStringVar)
-        turnLabel = Label(self, textvariable = self.gamelogic.turn_numberStringVar)
-        building_queueListbox = Listbox(self, height = 5, listvariable = self.gamelogic.building_queueStringVar)
+        housesLabel = ttk.Label(self, textvariable = self.gamelogic.houses_numberStringVar)
+        turnLabel = ttk.Label(self, textvariable = self.gamelogic.turn_numberStringVar)
+        building_queueLabel = ttk.Label(self, text = "Building queue")
+        building_queueListbox = Listbox(self, height = 5, background = "white", listvariable = self.gamelogic.building_queueStringVar)
         #building_queueStringVar.set(self.building_queue)
         
         #Binding actions to elements.
@@ -107,7 +107,8 @@ class GUI(Frame):
         self.grid(sticky = N + S + W + E)
         
         add_buildingsLabel.grid(row = 0, column = 0, sticky = S)
-        nameentry.grid(row = 9, column = 0, sticky = W)
+        self.nameentry.grid(row = 9, column = 0, sticky = W)
+        self.nameentry.focus()
         button1.grid(row = 9, column = 1)
         button2.grid(row = 9, column = 2)
         button3.grid(row = 9, column = 3)
@@ -122,17 +123,17 @@ class GUI(Frame):
         self.saved_nameLabel.grid(row = 8, column = 0, sticky = W)
         self.error_playernameLabel.grid(row = 8, column = 0, sticky = W)
         self.error_playernameLabel.grid_remove()
-        building_queueListbox.grid(row = 2, column = 0, sticky = W)
+        building_queueLabel.grid(row = 2, column = 0, sticky = S)
+        building_queueListbox.grid(row = 3, column = 0, sticky = W)
         #time_leftLabel.grid(row = 2, column = 1, sticky = W)
-        turns_leftLabel.grid(row = 3, column = 0, sticky = W)
-        emptylabel = Label(self, text = "")
+        turns_leftLabel.grid(row = 4, column = 0, sticky = W)
+        emptylabel = ttk.Label(self, text = "")
         emptylabel.grid(row = 2, column = 8)
    
         
 
 class GameLogic():
     def __init__(self):
-        #self.parent = parent
         self.turn = 0
         self.turns_left = 0
         self.houses = 0
@@ -142,8 +143,8 @@ class GameLogic():
         self.currently_building = ["Placeholder building", 0]
         self.buildings_list = sorted(["Air purifier", "Water purifier", "House", "Robot factory"])
         
-        self.saved_playernameStringVar = StringVar()
         self.playernameStringVar = StringVar()
+        self.saved_playernameStringVar = StringVar()
         self.turn_numberStringVar = StringVar()
         self.turn_numberStringVar.set("Turn %s" % self.turn)
         
@@ -154,10 +155,7 @@ class GameLogic():
         self.turns_leftStringVar = StringVar()
         
         self.set_buildings()
-        
-    
-    
-    #buildings_names = self.buildings_names
+
     
 
     #buildings_dict = {}
@@ -176,12 +174,12 @@ class GameLogic():
         if self.turn < 50:
             self.turn += 1
             self.turn_numberStringVar.set("Turn %s" % self.turn)
-            print "Turn", self.turn
+            print("Turn", self.turn)
             if self.turns_left > 1:
                 self.turns_left -= 1
-                print "Turns left: ", self.turns_left
+                print("Turns left: ", self.turns_left)
                 self.turns_leftStringVar.set(self.turns_left)
-                print "Set turns left to", self.turns_leftStringVar.get()
+                print("Set turns left to", self.turns_leftStringVar.get())
             elif self.turns_left == 1:
                 self.turns_left = 0
                 self.turns_leftStringVar.set("Built %s" % self.currently_building[0])
@@ -189,7 +187,7 @@ class GameLogic():
                 #self[self.currently_building[1]] = 1
                 self.currently_building[1] += 1
                 self.houses_numberStringVar.set("%ss: %s" % (self.currently_building[0], self.currently_building[1]))
-                print "No more turns left!"
+                print("No more turns left!")
         
     def save_playername(self, saved_nameLabel, error_playernameLabel):
         saving_name = str(self.playernameStringVar.get())
@@ -206,14 +204,12 @@ class GameLogic():
         current_turn = self.turn
         if self.turns_left != 0:
             self.turns_leftStringVar.set(self.turns_left)
-            print "Turns left: ", self.turns_leftStringVar.get()
+            print("Turns left: ", self.turns_leftStringVar.get())
 
     def add_buildings(self, buildingsListbox):
         selection = buildingsListbox.curselection()
         selection_id = int(selection[0])
         if len(selection) == 1:
-            #print buildings_list[selection_id]
-            #print "buildings_list index: %s" % buildings_list.index(buildings_list[selection_id])
             self.building_queue += "{%s}\n" % (self.buildings_list[selection_id])
             self.currently_building[0] = self.buildings_list[selection_id]
             if self.buildings_list[selection_id] == "House":
