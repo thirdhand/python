@@ -90,11 +90,13 @@ class GUI(Frame):
         
         
         resources = ttk.Labelframe(self, text = "Resources", labelanchor = "nw", width = 150, height = 100)
-        buildingsLabelframe = ttk.Labelframe(self, text = "Buildings", width = 100, height = 200)
+        buildingsLabelframe = ttk.Labelframe(self, text = "Buildings", labelanchor = "nw", width = 100, height = 200)
         #time_leftLabel = Label(self, textvariable = time_leftStringVar)
         turns_leftLabel = ttk.Label(self, textvariable = self.gamelogic.turns_leftStringVar)
+        turns_left_current_buildingLabel = ttk.Label(self, textvariable = self.gamelogic.turns_left_current_buildingStringVar)
         
-        housesLabel = ttk.Label(self, textvariable = self.gamelogic.houses_numberStringVar)
+        housesLabel = ttk.Label(buildingsLabelframe, textvariable = self.gamelogic.houses_numberStringVar)
+        air_purifierLabel = ttk.Label(buildingsLabelframe, textvariable = self.gamelogic.air_purifiers_numberStringVar)
         turnLabel = ttk.Label(self, textvariable = self.gamelogic.turn_numberStringVar)
         building_queueLabel = ttk.Label(self, text = "Building queue")
         building_queueListbox = Listbox(self, height = 5, background = "white", listvariable = self.gamelogic.building_queueStringVar)
@@ -119,7 +121,8 @@ class GUI(Frame):
         self.buildingsListbox.grid(row = 1, column = 0, sticky = W)
         #resources.grid(row = 0, column = 8, sticky = W)
         buildingsLabelframe.grid(row = 1, column = 8, sticky = W)
-        housesLabel.grid(row = 1, column = 8, sticky = W)
+        housesLabel.grid(row = 2, column = 8, sticky = W)
+        air_purifierLabel.grid(row = 1, column = 8, sticky = W)
         turnLabel.grid(row = 0, column = 8, sticky = E)
         self.saved_nameLabel.grid(row = 8, column = 0, sticky = W)
         self.error_playernameLabel.grid(row = 8, column = 0, sticky = W)
@@ -128,6 +131,7 @@ class GUI(Frame):
         building_queueListbox.grid(row = 3, column = 0, sticky = W)
         #time_leftLabel.grid(row = 2, column = 1, sticky = W)
         turns_leftLabel.grid(row = 4, column = 0, sticky = W)
+        turns_left_current_buildingLabel.grid(row = 5, column = 0, sticky = W)
         emptylabel = ttk.Label(self, text = "")
         emptylabel.grid(row = 2, column = 8)
    
@@ -137,38 +141,45 @@ class GameLogic():
     def __init__(self):
         self.turn = 0
         self.turns_left = 0
-        self.houses = 0
-        self.House = 0
+        self.turns_left_current_building = 0
+        self.air_purifiers_number = 0
+        self.houses_number = 0
         self.buildings_names = ""
-        self.building_queue = ""
-        self.currently_building = ["Placeholder building", 0]
+        self.building_queue = []
+        self.currently_building = ""
         self.buildings_list = sorted(["Air purifier", "Water purifier", "House", "Robot factory"])
+        self.buildings_dict = {}
         
         self.playernameStringVar = StringVar()
         self.saved_playernameStringVar = StringVar()
         self.turn_numberStringVar = StringVar()
         self.turn_numberStringVar.set("Turn %s" % self.turn)
         
+        self.air_purifiers_numberStringVar = StringVar()
         self.houses_numberStringVar = StringVar()
         self.buildingsStringVar = StringVar()
         self.building_queueStringVar = StringVar()
         self.time_leftStringVar = StringVar()
         self.turns_leftStringVar = StringVar()
+        self.turns_left_current_buildingStringVar = StringVar()
         
         self.set_buildings()
 
     
-
-    #buildings_dict = {}
-    def set_houses(self):
-        self.houses_numberStringVar.set("Houses: %s" % self.houses)
-    
     
     def set_buildings(self):
         for name in self.buildings_list:
-            #buildings_dict[buildings_list.index(name)] = name
+            self.buildings_dict[name] = 0
             self.buildings_names += "{%s}\n" % name
         self.buildingsStringVar.set(self.buildings_names)
+        self.air_purifiers_numberStringVar.set("Air purifiers: %s" % self.air_purifiers_number)
+        self.houses_numberStringVar.set("Houses: %s" % self.houses_number)
+        #chars_to_remove = ["{", "'", "}"]
+        #self.houses_numberStringVar.set(self.buildings_dict)
+        #buildings_names_filtered = ''.join([char for char in self.houses_numberStringVar.get() if char not in chars_to_remove])
+        #buildings_names_filtered = buildings_names_filtered.replace(",", "\n")
+        #self.houses_numberStringVar.set(buildings_names_filtered)
+            
 
         
     def run_simulation(self):
@@ -178,17 +189,31 @@ class GameLogic():
             print("Turn", self.turn)
             if self.turns_left > 1:
                 self.turns_left -= 1
+                self.turns_left_current_building -= 1
                 print("Turns left: ", self.turns_left)
-                self.turns_leftStringVar.set(self.turns_left)
+                self.turns_leftStringVar.set("Turns left: %s" % self.turns_left)
                 print("Set turns left to", self.turns_leftStringVar.get())
+                self.turns_left_current_buildingStringVar.set("Turns left for\ncurrent building: %s" % self.turns_left_current_building)
             elif self.turns_left == 1:
                 self.turns_left = 0
-                self.turns_leftStringVar.set("Built %s" % self.currently_building[0])
-                #print "%s" % type(self[self.currently_building])
-                #self[self.currently_building[1]] = 1
-                self.currently_building[1] += 1
-                self.houses_numberStringVar.set("%ss: %s" % (self.currently_building[0], self.currently_building[1]))
+                self.turns_leftStringVar.set("Built %s" % self.currently_building)
+                self.turns_left_current_buildingStringVar.set("Yep, built %s" % self.currently_building)
+                print(self.building_queue)
+                print(self.buildings_list[(len(self.building_queue) - 1)])
+                self.building_queue.remove(self.buildings_list[(len(self.building_queue) - 1)])
+                self.building_queueStringVar.set(self.building_queue)
+                print(self.building_queue)
+                #print("%s" % type(self[self.currently_building]))
+                if self.currently_building == "House":
+                    self.houses_number += 1
+                    self.houses_numberStringVar.set("Houses: %s" % self.houses_number)
+                elif self.currently_building == "Air purifier":
+                    self.air_purifiers_number += 1
+                    self.air_purifiers_numberStringVar.set("Air purifiers: %s" % self.air_purifiers_number)
+            if self.turns_left_current_building > 1:
+                
                 print("No more turns left!")
+
         
     def save_playername(self, saved_nameLabel, error_playernameLabel):
         saving_name = str(self.playernameStringVar.get())
@@ -201,28 +226,32 @@ class GameLogic():
             saved_nameLabel.grid_remove()
                 
     def set_turns_left(self, turn_amount = 0):
-        self.turns_left = turn_amount
+        self.turns_left += turn_amount
         current_turn = self.turn
         if self.turns_left != 0:
-            self.turns_leftStringVar.set(self.turns_left)
+            self.turns_leftStringVar.set("Turns left: %s" % self.turns_left)
             print("Turns left: ", self.turns_leftStringVar.get())
+            
+    def set_turns_left_current_building(self):
+        if self.turns_left_current_building != 0:
+            self.turns_left_current_buildingStringVar.set("Turns left for\ncurrent building: %s" % self.turns_left_current_building)
+            print("Turns left for current building: ", self.turns_left_current_buildingStringVar.get())
 
     def add_buildings(self, buildingsListbox):
         selection = buildingsListbox.curselection()
-        selection_id = int(selection[0])
+        self.selection_id = int(selection[0])
         if len(selection) == 1:
-            self.building_queue += "{%s}\n" % (self.buildings_list[selection_id])
-            self.currently_building[0] = self.buildings_list[selection_id]
-            if self.buildings_list[selection_id] == "House":
-                #self.building_queue += "{%s}\n" % (buildings_list[selection_id])
-                self.building_queueStringVar.set(self.building_queue)
-                self.set_turns_left(5)
-                #saved_playername.set("Building %s" % buildings_list[selection_id])
-            elif self.buildings_list[selection_id] == "Air purifier":
-                #self.building_queue += "{%s}\n" % (buildings_list[selection_id])
-                self.building_queueStringVar.set(self.building_queue)
-                self.set_turns_left(6)
-            #print self.building_queue
+            self.building_queue.append("%s" % (self.buildings_list[self.selection_id]))
+            self.currently_building = self.buildings_list[self.selection_id]
+            if self.currently_building == "House":
+                self.turns_left_current_building = 5
+            elif self.currently_building == "Air purifier":
+                self.turns_left_current_building = 6
+            else:
+                self.turns_left_current_building = 0
+            self.set_turns_left(self.turns_left_current_building)
+            self.set_turns_left_current_building()
+            self.building_queueStringVar.set(self.building_queue)
 
 
    
