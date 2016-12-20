@@ -148,7 +148,12 @@ class GameLogic():
         self.building_queue = []
         self.currently_building = ""
         self.buildings_list = sorted(["Air purifier", "Water purifier", "House", "Robot factory"])
-        self.buildings_dict = {}
+        self.buildings_dict = {
+            "Air purifier" : 4,
+            "Water purifier" : 4,
+            "House" : 5,
+            "Robot factory" : 7
+            }
         
         self.playernameStringVar = StringVar()
         self.saved_playernameStringVar = StringVar()
@@ -169,7 +174,7 @@ class GameLogic():
     
     def set_buildings(self):
         for name in self.buildings_list:
-            self.buildings_dict[name] = 0
+            #self.buildings_dict[name] = 0
             self.buildings_names += "{%s}\n" % name
         self.buildingsStringVar.set(self.buildings_names)
         self.air_purifiers_numberStringVar.set("Air purifiers: %s" % self.air_purifiers_number)
@@ -187,32 +192,37 @@ class GameLogic():
             self.turn += 1
             self.turn_numberStringVar.set("Turn %s" % self.turn)
             print("Turn", self.turn)
-            if self.turns_left > 1:
+            if self.turns_left_current_building > 1:
                 self.turns_left -= 1
                 self.turns_left_current_building -= 1
                 print("Turns left: ", self.turns_left)
                 self.turns_leftStringVar.set("Turns left: %s" % self.turns_left)
                 print("Set turns left to", self.turns_leftStringVar.get())
                 self.turns_left_current_buildingStringVar.set("Turns left for\ncurrent building: %s" % self.turns_left_current_building)
-            elif self.turns_left == 1:
+            elif self.turns_left_current_building == 1:
                 self.turns_left = 0
                 self.turns_leftStringVar.set("Built %s" % self.currently_building)
                 self.turns_left_current_buildingStringVar.set("Yep, built %s" % self.currently_building)
                 print(self.building_queue)
-                print(self.buildings_list[(len(self.building_queue) - 1)])
-                self.building_queue.remove(self.buildings_list[(len(self.building_queue) - 1)])
-                self.building_queueStringVar.set(self.building_queue)
-                print(self.building_queue)
-                #print("%s" % type(self[self.currently_building]))
+                if self.building_queue:
+                    self.building_queue.remove(self.currently_building)
+                    self.building_queueStringVar.set(self.building_queue)
+                    print(self.building_queue)
+                    if len(self.building_queue) > 0 and self.building_queue[0] in self.buildings_dict:
+                        self.turns_left_current_building = self.buildings_dict[self.building_queue[0]]
+                    else:
+                        print("Building queue empty")
+                else:
+                    self.turns_left = 0
                 if self.currently_building == "House":
                     self.houses_number += 1
                     self.houses_numberStringVar.set("Houses: %s" % self.houses_number)
                 elif self.currently_building == "Air purifier":
                     self.air_purifiers_number += 1
                     self.air_purifiers_numberStringVar.set("Air purifiers: %s" % self.air_purifiers_number)
-            if self.turns_left_current_building > 1:
-                
-                print("No more turns left!")
+                    print("No more turns left!")
+                else:
+                    print("Test")
 
         
     def save_playername(self, saved_nameLabel, error_playernameLabel):
@@ -233,6 +243,12 @@ class GameLogic():
             print("Turns left: ", self.turns_leftStringVar.get())
             
     def set_turns_left_current_building(self):
+        if self.currently_building in self.buildings_dict:
+            self.turns_left_current_building = self.buildings_dict[self.currently_building]
+        #elif self.currently_building == "Air purifier":
+            #self.turns_left_current_building = 6
+        else:
+            self.turns_left_current_building = 0
         if self.turns_left_current_building != 0:
             self.turns_left_current_buildingStringVar.set("Turns left for\ncurrent building: %s" % self.turns_left_current_building)
             print("Turns left for current building: ", self.turns_left_current_buildingStringVar.get())
@@ -243,12 +259,6 @@ class GameLogic():
         if len(selection) == 1:
             self.building_queue.append("%s" % (self.buildings_list[self.selection_id]))
             self.currently_building = self.buildings_list[self.selection_id]
-            if self.currently_building == "House":
-                self.turns_left_current_building = 5
-            elif self.currently_building == "Air purifier":
-                self.turns_left_current_building = 6
-            else:
-                self.turns_left_current_building = 0
             self.set_turns_left(self.turns_left_current_building)
             self.set_turns_left_current_building()
             self.building_queueStringVar.set(self.building_queue)
