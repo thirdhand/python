@@ -223,8 +223,10 @@ class GameLogic():
                 else:
                     print("Test")
                 if len(self.building_queue) > 0:
-                    self.currently_building = self.building_queue[0]
-                    
+                    print(self.building_queue[0])
+                    print("Building queue length: %s" % len(self.building_queue))
+                    self.currently_building = self.building_queue[len(self.building_queue)-1]
+
                     #self.turns_left_current_building = self.buildings_dict[self.building_queue[0]]
                     self.building_queueStringVar.set(self.building_queue)
                 else:
