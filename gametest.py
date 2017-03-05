@@ -26,6 +26,8 @@ class GUI(Frame):
         # List buildings you can build.
         self.buildingsListbox = Listbox(self, height = 13, background = "white", listvariable = self.gamelogic.buildingsStringVar)
         
+        self.building_queueListbox = Listbox(self, height = 5, background = "white", listvariable = self.gamelogic.building_queueStringVar)
+        
         # A name entry widget which currently does not work correctly due to miscommunication between GUI and GameLogic.
         self.nameentry = ttk.Entry(self, textvariable = self.gamelogic.playernameStringVar)
         
@@ -56,6 +58,9 @@ class GUI(Frame):
     # Communication function between this GUI class and the GameLogic class.
     def add_buildings(self, buildingsListbox):
         self.gamelogic.add_buildings(self.buildingsListbox)
+        
+    def remove_from_building_queue(self, building_queueListbox):
+        self.gamelogic.remove_from_building_queue(self.building_queueListbox)
         
     # Communication function between this GUI class and the GameLogic class. Does not currently work as intended (the saved name is not displayed).    
     def save_playername(self, saved_nameLabel, error_playernameLabel):
@@ -107,12 +112,12 @@ class GUI(Frame):
         air_purifierLabel = ttk.Label(buildingsLabelframe, textvariable = self.gamelogic.air_purifiers_numberStringVar)
         turnLabel = ttk.Label(self, textvariable = self.gamelogic.turn_numberStringVar)
         building_queueLabel = ttk.Label(self, text = "Building queue")
-        building_queueListbox = Listbox(self, height = 5, background = "white", listvariable = self.gamelogic.building_queueStringVar)
         #building_queueStringVar.set(self.building_queue)
         
         # Binding actions to elements.
         # Double-1 means double left click.
         self.buildingsListbox.bind("<Double-1>", self.add_buildings)
+        self.building_queueListbox.bind("<Double-1>", self.remove_from_building_queue)
         
         # Placement of UI elements on the grid.
         self.grid(sticky = N + S + W + E)
@@ -136,7 +141,7 @@ class GUI(Frame):
         self.error_playernameLabel.grid(row = 8, column = 0, sticky = W)
         self.error_playernameLabel.grid_remove()
         building_queueLabel.grid(row = 2, column = 0, sticky = S)
-        building_queueListbox.grid(row = 3, column = 0, sticky = W)
+        self.building_queueListbox.grid(row = 3, column = 0, sticky = W)
         #time_leftLabel.grid(row = 2, column = 1, sticky = W)
         turns_leftLabel.grid(row = 4, column = 0, sticky = W)
         turns_left_current_buildingLabel.grid(row = 5, column = 0, sticky = W)
@@ -202,6 +207,7 @@ class GameLogic():
             self.turn += 1
             self.turn_numberStringVar.set("Turn %s" % self.turn)
             print("Turn", self.turn)
+            print("First in self.building_queue: %s" % self.building_queue[len(self.building_queue)-1], ", index", len(self.building_queue)-1)
             if self.turns_left_current_building > 1:
                 self.turns_left_current_building -= 1
                 #print("Turns left: ", self.turns_left)
@@ -210,12 +216,13 @@ class GameLogic():
             elif self.turns_left_current_building == 1:
                 #self.turns_left_current_building = 0
                 print(self.building_queue)
-                print("First in self.building_queue: %s" % self.building_queue[len(self.building_queue)-1])
                 print("Index of self.currently_building: %s" % self.building_queue.index(self.currently_building))
+                #self.building_queue.remove(self.building_queue[len(self.building_queue)-1])
                 self.building_queue.remove(self.building_queue[len(self.building_queue)-1])
                 self.turns_left_current_buildingStringVar.set("Built %s" % self.currently_building)
-                print("self.buildings_dict[self.building_queue[0]]: %s" % self.buildings_dict[self.building_queue[self.currently_building_index]])
-                self.turns_left_current_building = self.buildings_dict[self.building_queue[self.currently_building_index]]
+                #print("self.buildings_dict[self.building_queue[0]]: %s" % self.buildings_dict[self.building_queue[self.currently_building_index]])
+                if self.building_queue:
+                    self.turns_left_current_building = self.buildings_dict[self.building_queue[self.currently_building_index]]
                 #self.turns_leftStringVar.set("Built %s" % self.currently_building)
                 if self.currently_building == "House":
                     self.houses_number += 1
@@ -223,9 +230,8 @@ class GameLogic():
                 elif self.currently_building == "Air purifier":
                     self.air_purifiers_number += 1
                     self.air_purifiers_numberStringVar.set("Air purifiers: %s" % self.air_purifiers_number)
-                    print("No more turns left!")
                 else:
-                    print("Test")
+                    print("No building to increase!")
                 if len(self.building_queue) > 0:
                     print("Building queue length: %s" % len(self.building_queue))
                     self.currently_building = self.building_queue[len(self.building_queue)-1]
@@ -285,6 +291,15 @@ class GameLogic():
             self.turns_leftStringVar.set("Turns left: %s" % self.turns_left)
         #else:
             #self.turns_left_current_buildingStringVar.set("Turns left for\ncurrent building: %s" % self.turns_left_current_building)
+    
+    def remove_from_building_queue(self, building_queueListbox):
+        selection = building_queueListbox.curselection()
+        self.selection_id = int(selection[0])
+        if len(selection) == 1:
+            self.building_queue.remove(self.building_queue[self.selection_id])
+            self.building_queueStringVar.set(self.building_queue)
+            self.currently_building = self.building_queue[len(self.building_queue)-1]
+            #self.set_turns_left_current_building()
             
     # Controls what happens when double clicking an item in the building list.
     def add_buildings(self, buildingsListbox):
