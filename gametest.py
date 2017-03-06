@@ -217,8 +217,9 @@ class GameLogic():
                 #self.turns_left_current_building = 0
                 print(self.building_queue)
                 print("Index of self.currently_building: %s" % self.building_queue.index(self.currently_building))
+                print("self.building_queue[len(self.building_queue)-1]:", self.building_queue[len(self.building_queue)-1])
                 #self.building_queue.remove(self.building_queue[len(self.building_queue)-1])
-                self.building_queue.remove(self.building_queue[len(self.building_queue)-1])
+                self.building_queue.pop()
                 self.turns_left_current_buildingStringVar.set("Built %s" % self.currently_building)
                 #print("self.buildings_dict[self.building_queue[0]]: %s" % self.buildings_dict[self.building_queue[self.currently_building_index]])
                 if self.building_queue:
