@@ -268,7 +268,6 @@ class GameLogic():
     # Logic for displaying how many turns are left to build the whole building queue.
     def set_turns_left(self, turn_amount = 0):
         self.turns_left = turn_amount
-        current_turn = self.turn
         self.turns_leftStringVar.set("Turns left: %s" % self.turns_left)
         if self.turns_left:
             print("Turns left: ", self.turns_left)
@@ -279,13 +278,9 @@ class GameLogic():
     def set_turns_left_current_building(self):
         print(self.building_queue)
         turn_amount = 0
-        #print("Index: %s" % self.currently_building_index)
-        #print(self.building_queue[building_queue_index])
-        #print(self.buildings_dict[self.building_queue[len(self.building_queue)]])
-        #if len(self.building_queue) > 0:
-            #self.turns_left_current_building = self.buildings_dict[self.building_queue[len(self.building_queue)]]
         if self.building_queue:
-            self.turns_left_current_building = self.buildings_dict[self.building_queue[self.currently_building_index]]
+            if self.turns_left_current_building == 0:
+                self.turns_left_current_building = self.buildings_dict[self.building_queue[self.currently_building_index]]
             for index, building in enumerate(self.building_queue):
                 print("Building index:", index, building)
                 if index != len(self.building_queue)-1:
@@ -294,11 +289,9 @@ class GameLogic():
                 else:
                     print("Added %s turns left for current building to self.turns_left." % self.turns_left_current_building)
                     turn_amount += self.turns_left_current_building
-                #self.set_turns_left(self.turns_left)
         else:
             self.turns_left_current_building = 0
         self.turns_left_current_buildingStringVar.set("Turns left for\ncurrent building: %s" % self.turns_left_current_building)
-        #self.turns_leftStringVar.set("Turns left: %s" % self.turns_left)
         self.set_turns_left(turn_amount)
     
     def remove_from_building_queue(self, building_queueListbox):
@@ -321,9 +314,7 @@ class GameLogic():
         self.selection_id = int(selection[0])
         if len(selection) == 1:
             self.building_queue.insert(0, "%s" % (self.buildings_list[self.selection_id]))
-            #self.currently_building = self.buildings_list[self.selection_id]
             self.currently_building = self.building_queue[len(self.building_queue)-1]
-            #self.set_turns_left(self.turns_left_current_building)
             self.set_turns_left_current_building()
             self.building_queueStringVar.set(self.building_queue)
 
