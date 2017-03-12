@@ -211,22 +211,18 @@ class GameLogic():
             #print("First in self.building_queue: %s" % self.building_queue[len(self.building_queue)-1], ", index", len(self.building_queue)-1)
             if self.turns_left_current_building > 1:
                 self.turns_left_current_building -= 1
-                #print("Turns left: ", self.turns_left)
                 self.turns_left_current_buildingStringVar.set("Turns left for\ncurrent building: %s" % self.turns_left_current_building)
                 print("Turns left for current building: ", self.turns_left_current_building)
                 print("self.currently_building_index: ", len(self.building_queue)-1)
-            elif self.turns_left_current_building == 1:
-                #self.turns_left_current_building = 0
+            else:
                 print(self.building_queue)
                 print("Index of self.currently_building: %s" % self.building_queue.index(self.currently_building))
                 print("self.building_queue[len(self.building_queue)-1]:", self.building_queue[len(self.building_queue)-1])
-                #self.building_queue.remove(self.building_queue[len(self.building_queue)-1])
                 self.building_queue.pop()
                 self.turns_left_current_buildingStringVar.set("Built %s" % self.currently_building)
                 #print("self.buildings_dict[self.building_queue[0]]: %s" % self.buildings_dict[self.building_queue[self.currently_building_index]])
                 if self.building_queue:
                     self.turns_left_current_building = self.buildings_dict[self.building_queue[self.currently_building_index]]
-                #self.turns_leftStringVar.set("Built %s" % self.currently_building)
                 if self.currently_building == "House":
                     self.houses_number += 1
                     self.houses_numberStringVar.set("Houses: %s" % self.houses_number)
@@ -276,8 +272,8 @@ class GameLogic():
             
     # Logic for displaying how many turns are left building the foremost building in the queue.        
     def set_turns_left_current_building(self):
-        print(self.building_queue)
         turn_amount = 0
+        print(self.building_queue)
         if self.building_queue:
             if self.turns_left_current_building == 0:
                 self.turns_left_current_building = self.buildings_dict[self.building_queue[self.currently_building_index]]
@@ -294,6 +290,7 @@ class GameLogic():
         self.turns_left_current_buildingStringVar.set("Turns left for\ncurrent building: %s" % self.turns_left_current_building)
         self.set_turns_left(turn_amount)
     
+    # Handles removal of buildings from building queue.
     def remove_from_building_queue(self, building_queueListbox):
         selection = building_queueListbox.curselection()
         if self.building_queue and len(selection) == 1:
