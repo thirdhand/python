@@ -269,66 +269,51 @@ class GameLogic():
     def set_turns_left(self, turn_amount = 0):
         self.turns_left = turn_amount
         current_turn = self.turn
+        self.turns_leftStringVar.set("Turns left: %s" % self.turns_left)
         if self.turns_left:
-            self.turns_leftStringVar.set("Turns left: %s" % self.turns_left)
             print("Turns left: ", self.turns_left)
+        else:
+            print("No more turns left.")
             
     # Logic for displaying how many turns are left building the foremost building in the queue.        
     def set_turns_left_current_building(self):
         print(self.building_queue)
-        self.turns_left = 0
+        turn_amount = 0
         #print("Index: %s" % self.currently_building_index)
         #print(self.building_queue[building_queue_index])
         #print(self.buildings_dict[self.building_queue[len(self.building_queue)]])
         #if len(self.building_queue) > 0:
             #self.turns_left_current_building = self.buildings_dict[self.building_queue[len(self.building_queue)]]
-        if len(self.building_queue) > 0:
+        if self.building_queue:
             self.turns_left_current_building = self.buildings_dict[self.building_queue[self.currently_building_index]]
-            self.turns_left_current_buildingStringVar.set("Turns left for\ncurrent building: %s" % self.turns_left_current_building)
+            for index, building in enumerate(self.building_queue):
+                print("Building index:", index, building)
+                if index != len(self.building_queue)-1:
+                    print("Added turns to self.turns_left:", self.buildings_dict.get(building))
+                    turn_amount += self.buildings_dict.get(building)
+                else:
+                    print("Added %s turns left for current building to self.turns_left." % self.turns_left_current_building)
+                    turn_amount += self.turns_left_current_building
+                #self.set_turns_left(self.turns_left)
         else:
             self.turns_left_current_building = 0
-        for building in self.building_queue:
-            self.turns_left += self.buildings_dict.get(building)
-            self.set_turns_left(self.turns_left)
         self.turns_left_current_buildingStringVar.set("Turns left for\ncurrent building: %s" % self.turns_left_current_building)
-        self.turns_leftStringVar.set("Turns left: %s" % self.turns_left)
+        #self.turns_leftStringVar.set("Turns left: %s" % self.turns_left)
+        self.set_turns_left(turn_amount)
     
     def remove_from_building_queue(self, building_queueListbox):
         selection = building_queueListbox.curselection()
-        if len(self.building_queue) > 0:
+        if self.building_queue and len(selection) == 1:
             self.selection_id = int(selection[0])
-            if self.building_queue and len(selection) == 1:
-                self.building_queue.remove(self.building_queue[self.selection_id])
-                self.building_queueStringVar.set(self.building_queue)
-                if len(self.building_queue)-1 != -1:
-                    self.currently_building = self.building_queue[len(self.building_queue)-1]
-                self.turns_left = 0
-                #print("enumerate(self.building_queue):", enumerate(["House", "House", "House"]))
-                for index, building in enumerate(self.building_queue):
-                    print("Building index:", index, building)
-                    unique_index = index
-                    print("self.building_queue[:-1]:", self.building_queue[:-1])
-                    print("unique_index:", unique_index)
-                    if index != len(self.building_queue)-1:
-                        print("Added turns to self.turns_left:", self.buildings_dict.get(building))
-                        self.turns_left += self.buildings_dict.get(building)
-                    else:
-                        print("Added remaining turns left for current building to self.turns_left.")
-                        self.turns_left += self.turns_left_current_building
-                    self.set_turns_left(self.turns_left)
-                print("Turns left:", self.turns_left)
-            else:
-                print("No more buildings to remove.")
-                self.turns_left_current_building = 0
-                self.building_queueStringVar.set(self.building_queue)
-                print("Building queue empty")
-        #self.set_turns_left_current_building()
-        if self.selection_id != len(self.building_queue)-1:
-            print("self.currently_building_index:", self.currently_building_index)
-            print("SELECTION ==", self.selection_id)
-            self.set_turns_left_current_building()
-        #else:
-            #print("LEN != 1")
+            self.building_queue.remove(self.building_queue[self.selection_id])
+            self.building_queueStringVar.set(self.building_queue)
+            if len(self.building_queue)-1 != -1:
+                self.currently_building = self.building_queue[len(self.building_queue)-1]
+        else:
+            print("No more buildings to remove.")
+            self.building_queueStringVar.set(self.building_queue)
+            print("Building queue empty")
+        self.set_turns_left_current_building()
             
     # Controls what happens when double clicking an item in the building list.
     def add_buildings(self, buildingsListbox):
