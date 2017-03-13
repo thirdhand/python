@@ -216,31 +216,7 @@ class GameLogic():
                 print("self.currently_building_index: ", len(self.building_queue)-1)
             else:
                 print(self.building_queue)
-                print("Index of self.currently_building: %s" % self.building_queue.index(self.currently_building))
-                print("self.building_queue[len(self.building_queue)-1]:", self.building_queue[len(self.building_queue)-1])
-                self.building_queue.pop()
-                self.turns_left_current_buildingStringVar.set("Built %s" % self.currently_building)
-                #print("self.buildings_dict[self.building_queue[0]]: %s" % self.buildings_dict[self.building_queue[self.currently_building_index]])
-                if self.building_queue:
-                    self.turns_left_current_building = self.buildings_dict[self.building_queue[self.currently_building_index]]
-                if self.currently_building == "House":
-                    self.houses_number += 1
-                    self.houses_numberStringVar.set("Houses: %s" % self.houses_number)
-                elif self.currently_building == "Air purifier":
-                    self.air_purifiers_number += 1
-                    self.air_purifiers_numberStringVar.set("Air purifiers: %s" % self.air_purifiers_number)
-                else:
-                    print("No building to increase!")
-                if len(self.building_queue) > 0:
-                    print("Building queue length: %s" % len(self.building_queue))
-                    self.currently_building = self.building_queue[len(self.building_queue)-1]
-
-                    #self.turns_left_current_building = self.buildings_dict[self.building_queue[0]]
-                    self.building_queueStringVar.set(self.building_queue)
-                else:
-                    self.turns_left_current_building = 0
-                    self.building_queueStringVar.set(self.building_queue)
-                    print("Building queue empty")
+                self.add_built(self.currently_building)
             if self.turns_left > 1:
                 self.turns_left -= 1
                 self.turns_leftStringVar.set("Turns left: %s" % self.turns_left)
@@ -249,6 +225,30 @@ class GameLogic():
                 self.turns_left = 0
                 self.turns_leftStringVar.set("Queue empty")
                 print("Set turns left to 0")
+
+    def add_built(self, currently_building):
+        if self.building_queue:
+            self.building_queue.pop()
+            self.building_queueStringVar.set(self.building_queue)
+            self.turns_left_current_buildingStringVar.set("Built %s" % self.currently_building)
+        else:
+            self.turns_left_current_building = 0
+            self.building_queueStringVar.set(self.building_queue)
+            print("Building queue empty")
+        if currently_building == "House":
+            self.houses_number += 1
+            self.houses_numberStringVar.set("Houses: %s" % self.houses_number)
+        elif currently_building == "Air purifier":
+            self.air_purifiers_number += 1
+            self.air_purifiers_numberStringVar.set("Air purifiers: %s" % self.air_purifiers_number)
+        else:
+            print("No building to increase!")
+        if self.building_queue:
+            print("Building queue length: %s" % len(self.building_queue))
+            self.currently_building = self.building_queue[len(self.building_queue)-1]
+            self.turns_left_current_building = self.buildings_dict[self.building_queue[self.currently_building_index]]
+        else:
+            self.currently_building = None
 
     # Logic for saving playername to labels in GUI.    
     def save_playername(self, saved_nameLabel, error_playernameLabel):
