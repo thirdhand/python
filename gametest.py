@@ -307,8 +307,8 @@ class GameLogic():
     def remove_from_building_queue(self, building_queueListbox):
         selection = building_queueListbox.curselection()
         if self.building_queue and len(selection) == 1:
-            self.selection_id = int(selection[0])
-            self.building_queue.remove(self.building_queue[self.selection_id])
+            selection_id = int(selection[0])
+            self.building_queue.remove(self.building_queue[selection_id])
             self.building_queueStringVar.set(self.building_queue)
             if len(self.building_queue)-1 != -1:
                 self.currently_building = self.building_queue[len(self.building_queue)-1]
