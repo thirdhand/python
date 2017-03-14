@@ -62,6 +62,9 @@ class GUI(Frame):
     def remove_from_building_queue(self, building_queueListbox):
         self.gamelogic.remove_from_building_queue(self.building_queueListbox)
         
+    def set_building_description(self, buildingsListbox):
+        self.gamelogic.set_building_description()
+        
     # Communication function between this GUI class and the GameLogic class. Does not currently work as intended (the saved name is not displayed).    
     def save_playername(self, saved_nameLabel, error_playernameLabel):
         self.gamelogic.save_playername(self.saved_nameLabel, self.error_playernameLabel)
@@ -104,6 +107,7 @@ class GUI(Frame):
         
         resources = ttk.Labelframe(self, text = "Resources", labelanchor = "nw", width = 150, height = 100)
         buildingsLabelframe = ttk.Labelframe(self, text = "Buildings", labelanchor = "nw", width = 100, height = 200)
+        building_descriptionLabel = ttk.Label(self, textvariable = self.gamelogic.building_descriptionStringVar)
         #time_leftLabel = Label(self, textvariable = time_leftStringVar)
         turns_leftLabel = ttk.Label(self, textvariable = self.gamelogic.turns_leftStringVar)
         turns_left_current_buildingLabel = ttk.Label(self, textvariable = self.gamelogic.turns_left_current_buildingStringVar)
@@ -117,6 +121,7 @@ class GUI(Frame):
         # Binding actions to elements.
         # Double-1 means double left click.
         self.buildingsListbox.bind("<Double-1>", self.add_buildings)
+        self.buildingsListbox.bind("<1>", self.set_building_description)
         self.building_queueListbox.bind("<Double-1>", self.remove_from_building_queue)
         
         # Placement of UI elements on the grid.
@@ -134,6 +139,7 @@ class GUI(Frame):
         self.buildingsListbox.grid(row = 1, column = 0, sticky = W)
         #resources.grid(row = 0, column = 8, sticky = W)
         buildingsLabelframe.grid(row = 1, column = 8, sticky = W)
+        building_descriptionLabel.grid(row = 1, column = 1, sticky = NW)
         housesLabel.grid(row = 2, column = 8, sticky = W)
         air_purifierLabel.grid(row = 1, column = 8, sticky = W)
         turnLabel.grid(row = 0, column = 8, sticky = E)
@@ -175,6 +181,7 @@ class GameLogic():
         self.saved_playernameStringVar = StringVar()
         self.turn_numberStringVar = StringVar()
         self.turn_numberStringVar.set("Turn %s" % self.turn)
+        self.building_descriptionStringVar = StringVar()
         
         self.air_purifiers_numberStringVar = StringVar()
         self.houses_numberStringVar = StringVar()
@@ -190,8 +197,7 @@ class GameLogic():
     # Populate the list of built buildings with building names in self.buildings_list.
     def set_buildings(self):
         for name in self.buildings_list:
-            #self.buildings_dict[name] = 0
-            self.buildings_names += "{%s}\n" % name
+            self.buildings_names += "{%s}\n" % (name)
         self.buildingsStringVar.set(self.buildings_names)
         self.air_purifiers_numberStringVar.set("Air purifiers: %s" % self.air_purifiers_number)
         self.houses_numberStringVar.set("Houses: %s" % self.houses_number)
@@ -201,6 +207,12 @@ class GameLogic():
         #buildings_names_filtered = buildings_names_filtered.replace(",", "\n")
         #self.houses_numberStringVar.set(buildings_names_filtered)
             
+    def set_building_description(self):
+        #selection = buildingsListbox.curselection()
+        #selection_id = int(selection[0])
+        
+        self.building_descriptionStringVar.set("Test2")
+
 
     # This defines what happens when clicking End turn.    
     def run_simulation(self):
@@ -225,7 +237,8 @@ class GameLogic():
                 self.turns_left = 0
                 self.turns_leftStringVar.set("Queue empty")
                 print("Set turns left to 0")
-
+                
+    # This defines what happens when finishing building something.
     def add_built(self, currently_building):
         if self.building_queue:
             self.building_queue.pop()
@@ -308,12 +321,11 @@ class GameLogic():
     # Controls what happens when double clicking an item in the building list.
     def add_buildings(self, buildingsListbox):
         selection = buildingsListbox.curselection()
-        self.selection_id = int(selection[0])
-        if len(selection) == 1:
-            self.building_queue.insert(0, "%s" % (self.buildings_list[self.selection_id]))
-            self.currently_building = self.building_queue[len(self.building_queue)-1]
-            self.set_turns_left_current_building()
-            self.building_queueStringVar.set(self.building_queue)
+        selection_id = int(selection[0])
+        self.building_queue.insert(0, "%s" % (self.buildings_list[selection_id]))
+        self.currently_building = self.building_queue[len(self.building_queue)-1]
+        self.set_turns_left_current_building()
+        self.building_queueStringVar.set(self.building_queue)
 
 
    
