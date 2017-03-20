@@ -292,7 +292,10 @@ class GameLogic():
             for index, building in enumerate(self.building_queue):
                 print("Building index:", index, building)
                 print("Added turns to self.turns_left:", self.buildings_dict.get(building))
-                turn_amount += self.buildings_dict.get(building)
+                if index != self.currently_building_index:
+                    turn_amount += self.buildings_dict.get(building)
+                elif len(self.building_queue) == 1:
+                    turn_amount += self.buildings_dict.get(building)
         else:
             self.turns_left_current_building = 0
         self.turns_left_current_buildingStringVar.set("Turns left for\ncurrent building: %s" % self.turns_left_current_building)
