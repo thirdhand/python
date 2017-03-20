@@ -243,6 +243,7 @@ class GameLogic():
             self.building_queue.pop()
             self.building_queueStringVar.set(self.building_queue)
             self.turns_left_current_buildingStringVar.set("Built %s" % self.currently_building)
+            self.currently_building_index = len(self.building_queue) - 1
         else:
             self.turns_left_current_building = 0
             self.building_queueStringVar.set(self.building_queue)
@@ -286,8 +287,9 @@ class GameLogic():
     def set_turns_left_current_building(self):
         turn_amount = 0
         print(self.building_queue)
+        self.currently_building_index = len(self.building_queue) - 1
         if self.building_queue:
-            if self.turns_left_current_building == 0:
+            if self.turns_left_current_building <= 1:
                 self.turns_left_current_building = self.buildings_dict[self.building_queue[self.currently_building_index]]
             for index, building in enumerate(self.building_queue):
                 print("Building index:", index, building)
@@ -296,6 +298,8 @@ class GameLogic():
                     turn_amount += self.buildings_dict.get(building)
                 elif len(self.building_queue) == 1:
                     turn_amount += self.buildings_dict.get(building)
+                else:
+                    turn_amount += self.turns_left_current_building
         else:
             self.turns_left_current_building = 0
         self.turns_left_current_buildingStringVar.set("Turns left for\ncurrent building: %s" % self.turns_left_current_building)
@@ -332,6 +336,7 @@ class GameLogic():
             #self.set_turns_left(turn_amount)
         else:
             print("No more buildings to remove.")
+            self.turns_left_current_building = 0
             self.building_queueStringVar.set(self.building_queue)
             print("Building queue empty")
         print("self.building_queue empty: ", self.building_queue)
