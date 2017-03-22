@@ -323,7 +323,9 @@ class Buildings():
     def add_buildings(self, buildingsListbox):
         selection = buildingsListbox.curselection()
         selection_id = int(selection[0])
-        GameLogic().building_queue.insert(0, "%s" % (Buildings().buildings_list[selection_id]))
+        GameLogic().building_queue.insert(0, "%s" % (self.buildings_list[selection_id]))
+        GameLogic().building_queue.insert(0, "Test")
+        print("Building queue: ", GameLogic().building_queue)
         self.currently_building = GameLogic().building_queue[len(GameLogic().building_queue)-1]
         self.set_turns_left_current_building()
         GameLogic.building_queueStringVar.set(GameLogic.building_queue)
