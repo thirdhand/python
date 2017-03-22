@@ -18,7 +18,7 @@
     <feature id="refactoring.introduceVariable" count="0" last-shown="0" last-used="0" shown-count="0" />
     <feature id="codeassists.quickdefinition" count="0" last-shown="0" last-used="0" shown-count="0" />
     <feature id="find.completion" count="0" last-shown="0" last-used="0" shown-count="0" />
-    <feature id="editing.completion.basic" count="6" last-shown="0" last-used="1490030948167" shown-count="0" />
+    <feature id="editing.completion.basic" count="8" last-shown="0" last-used="1490180550939" shown-count="0" />
     <feature id="tag.name.completion" count="0" last-shown="0" last-used="0" shown-count="0" />
     <feature id="editing.select.word" count="2" last-shown="0" last-used="1490031568687" shown-count="0" />
     <feature id="navigation.recent.files" count="0" last-shown="0" last-used="0" shown-count="0" />
@@ -38,11 +38,11 @@
     <feature id="ui.horizontal.scrolling" count="0" last-shown="0" last-used="0" shown-count="0" />
     <feature id="codeassists.quickdefinition.lookup" count="0" last-shown="0" last-used="0" shown-count="0" />
     <completionStatsTag>
-      <option name="sparedCharacters" value="75" />
-      <option name="invocations" value="6" />
+      <option name="sparedCharacters" value="80" />
+      <option name="invocations" value="7" />
       <option name="startDate" value="1489964400000" />
-      <option name="dayCount" value="1" />
-      <option name="lastDate" value="1489964400000" />
+      <option name="dayCount" value="2" />
+      <option name="lastDate" value="1490137200000" />
     </completionStatsTag>
     <fixesStatsTag>
       <option name="invocations" value="6" />

@@ -10,6 +10,10 @@
     <location key="CommitChangelistDialog2.0.0.1920.1080" x="588" y="108" />
     <location key="Vcs.Push.Dialog.0.0.1920.1080" x="778" y="233" />
     <location key="com.intellij.openapi.vcs.changes.UnversionedViewDialog.0.0.1920.1080" x="816" y="246" />
+    <location key="WELCOME_SCREEN.0.0.1024.600" x="511" y="230" />
+    <location key="com.intellij.ide.util.TipDialog.0.0.1024.600" x="223" y="129" />
+    <location key="SettingsEditor.0.0.1024.600" x="0" y="25" />
+    <location key="FileChooserDialogImpl.0.0.1024.600" x="292" y="46" />
     <size key="GridCell.Tab.0.left.0.0.1920.1080" width="1373" height="262" />
     <size key="GridCell.Tab.0.center.0.0.1920.1080" width="1373" height="262" />
     <size key="GridCell.Tab.0.right.0.0.1920.1080" width="1373" height="262" />
@@ -20,5 +24,11 @@
     <size key="CommitChangelistDialog2.0.0.1920.1080" width="744" height="821" />
     <size key="Vcs.Push.Dialog.0.0.1920.1080" width="363" height="572" />
     <size key="com.intellij.openapi.vcs.update.UpdateOrStatusOptionsDialogupdate.0.0.1920.1080" width="486" height="241" />
+    <size key="SettingsEditor.0.0.1024.600" width="1018" height="565" />
+    <size key="GridCell.Tab.0.left.0.0.1024.600" width="1001" height="127" />
+    <size key="GridCell.Tab.0.center.0.0.1024.600" width="1001" height="127" />
+    <size key="GridCell.Tab.0.right.0.0.1024.600" width="1001" height="127" />
+    <size key="GridCell.Tab.0.bottom.0.0.1024.600" width="1001" height="127" />
+    <size key="FileChooserDialogImpl.0.0.1024.600" width="428" height="513" />
   </component>
 </application>
