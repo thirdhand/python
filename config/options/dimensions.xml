@@ -1,0 +1,24 @@
+<application>
+  <component name="DimensionService">
+    <location key="GitCloneDialog.0.0.1920.1080" x="712" y="329" />
+    <location key="FileChooserDialogImpl.0.0.1920.1080" x="746" y="176" />
+    <location key="WELCOME_SCREEN.0.0.1920.1080" x="959" y="230" />
+    <location key="com.intellij.ide.util.TipDialog.0.0.1920.1080" x="675" y="335" />
+    <location key="SettingsEditor.0.0.1920.1080" x="447" y="172" />
+    <location key="git4idea.merge.GitPullDialog.0.0.1920.1080" x="716" y="303" />
+    <location key="com.intellij.openapi.vcs.update.UpdateOrStatusOptionsDialogupdate.0.0.1920.1080" x="717" y="398" />
+    <location key="CommitChangelistDialog2.0.0.1920.1080" x="588" y="108" />
+    <location key="Vcs.Push.Dialog.0.0.1920.1080" x="778" y="233" />
+    <location key="com.intellij.openapi.vcs.changes.UnversionedViewDialog.0.0.1920.1080" x="816" y="246" />
+    <size key="GridCell.Tab.0.left.0.0.1920.1080" width="1373" height="262" />
+    <size key="GridCell.Tab.0.center.0.0.1920.1080" width="1373" height="262" />
+    <size key="GridCell.Tab.0.right.0.0.1920.1080" width="1373" height="262" />
+    <size key="GridCell.Tab.0.bottom.0.0.1920.1080" width="1373" height="262" />
+    <size key="git4idea.merge.GitPullDialog.0.0.1920.1080" width="487" height="431" />
+    <size key="FileChooserDialogImpl.0.0.1920.1080" width="428" height="495" />
+    <size key="SettingsEditor.0.0.1920.1080" width="1026" height="693" />
+    <size key="CommitChangelistDialog2.0.0.1920.1080" width="744" height="821" />
+    <size key="Vcs.Push.Dialog.0.0.1920.1080" width="363" height="572" />
+    <size key="com.intellij.openapi.vcs.update.UpdateOrStatusOptionsDialogupdate.0.0.1920.1080" width="486" height="241" />
+  </component>
+</application>

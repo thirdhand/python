@@ -1,0 +1,42 @@
+<application>
+  <component name="RecentDirectoryProjectsManager">
+    <option name="recentPaths">
+      <list>
+        <option value="$USER_HOME$/PycharmProjects/gametest" />
+      </list>
+    </option>
+    <option name="openPaths">
+      <list>
+        <option value="$USER_HOME$/PycharmProjects/gametest" />
+      </list>
+    </option>
+    <option name="lastPath" value="$USER_HOME$/PycharmProjects/gametest" />
+    <option name="additionalInfo">
+      <map>
+        <entry key="$USER_HOME$/PycharmProjects/gametest">
+          <value>
+            <RecentProjectMetaInfo>
+              <option name="build" value="PC-163.15188.4" />
+              <option name="productionCode" value="PC" />
+              <option name="binFolder" value="$APPLICATION_HOME_DIR$/bin" />
+              <option name="projectOpenTimestamp" value="1489982617815" />
+              <option name="buildTimestamp" value="1489165088240" />
+            </RecentProjectMetaInfo>
+          </value>
+        </entry>
+        <entry key="/tmp/gametest.py">
+          <value>
+            <RecentProjectMetaInfo>
+              <option name="build" value="PC-163.15188.4" />
+              <option name="productionCode" value="PC" />
+              <option name="binFolder" value="$APPLICATION_HOME_DIR$/bin" />
+              <option name="projectOpenTimestamp" value="1489981498291" />
+              <option name="buildTimestamp" value="1489165124564" />
+            </RecentProjectMetaInfo>
+          </value>
+        </entry>
+      </map>
+    </option>
+    <option name="lastProjectLocation" value="$USER_HOME$/PycharmProjects" />
+  </component>
+</application>
