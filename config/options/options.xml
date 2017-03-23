@@ -13,7 +13,7 @@
     <property name="lastTip" value="9" />
     <property name="debug.configuration.alternate.action.ad" value="true" />
     <property name="OpenOrAttachDialog.OpenMode" value="attach" />
-    <property name="CommitChangeListDialog.DETAILS_SPLITTER_PROPORTION_2" value="0.61659515" />
+    <property name="CommitChangeListDialog.DETAILS_SPLITTER_PROPORTION_2" value="0.6335541" />
     <property name="KEYMAP" value="comment" />
   </component>
 </application>

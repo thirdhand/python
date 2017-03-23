@@ -21,7 +21,7 @@ class GUI(Frame):
         
         self.initUI()
         self.gamelogic = GameLogic()
-        self.buildings = Buildings()
+        self.building = Buildings(self.gamelogic)
         
         # List buildings you can build.
         self.buildingsListbox = Listbox(self, height = 13, background = "white", listvariable = self.buildings.buildingsStringVar)
@@ -57,13 +57,13 @@ class GUI(Frame):
         
     # Communication function between this GUI class and the GameLogic class.
     def add_buildings(self, buildingsListbox):
-        Buildings().add_buildings(self.buildingsListbox)
+        self.buildings.add_buildings(self.buildingsListbox)
         
     def remove_from_building_queue(self, building_queueListbox):
         self.gamelogic.remove_from_building_queue(self.building_queueListbox)
         
     def set_building_description(self, buildingsListbox):
-        Buildings().set_building_description()
+        self.buildings.set_building_description()
         
     # Communication function between this GUI class and the GameLogic class. Does not currently work as intended (the saved name is not displayed).    
     def save_playername(self, saved_nameLabel, error_playernameLabel):
@@ -107,13 +107,13 @@ class GUI(Frame):
         
         resources = ttk.Labelframe(self, text = "Resources", labelanchor = "nw", width = 150, height = 100)
         buildingsLabelframe = ttk.Labelframe(self, text = "Buildings", labelanchor = "nw", width = 100, height = 200)
-        building_descriptionLabel = ttk.Label(self, textvariable = Buildings().building_descriptionStringVar)
+        building_descriptionLabel = ttk.Label(self, textvariable = self.buildings.building_descriptionStringVar)
         #time_leftLabel = Label(self, textvariable = time_leftStringVar)
         turns_leftLabel = ttk.Label(self, textvariable = self.gamelogic.turns_leftStringVar)
         turns_left_current_buildingLabel = ttk.Label(self, textvariable = self.gamelogic.turns_left_current_buildingStringVar)
         
-        housesLabel = ttk.Label(buildingsLabelframe, textvariable = Buildings().houses_numberStringVar)
-        air_purifierLabel = ttk.Label(buildingsLabelframe, textvariable = Buildings().air_purifiers_numberStringVar)
+        housesLabel = ttk.Label(buildingsLabelframe, textvariable = self.buildings.houses_numberStringVar)
+        air_purifierLabel = ttk.Label(buildingsLabelframe, textvariable = self.buildings.air_purifiers_numberStringVar)
         turnLabel = ttk.Label(self, textvariable = self.gamelogic.turn_numberStringVar)
         building_queueLabel = ttk.Label(self, text = "Building queue")
         #building_queueStringVar.set(self.building_queue)
@@ -297,6 +297,7 @@ class Buildings():
 
         self.air_purifiers_numberStringVar = StringVar()
         self.houses_numberStringVar = StringVar()
+
 
         self.set_buildings()
 
