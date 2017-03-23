@@ -21,7 +21,7 @@ class GUI(Frame):
         
         self.initUI()
         self.gamelogic = GameLogic()
-        self.building = Buildings(self.gamelogic)
+        self.buildings = Buildings(self.gamelogic)
         
         # List buildings you can build.
         self.buildingsListbox = Listbox(self, height = 13, background = "white", listvariable = self.buildings.buildingsStringVar)
@@ -276,7 +276,9 @@ class GameLogic():
 
 
 class Buildings():
-    def __init__(self):
+    def __init__(self, gamelogic):
+        self.gamelogic = GameLogic()
+
         self.air_purifiers_number = 0
         self.houses_number = 0
         self.buildings_names = ""
