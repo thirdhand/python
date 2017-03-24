@@ -6,12 +6,14 @@ from tkinter import ttk
 class Init():
     def __init__(self, Main, GameLogic):
         Main()
-        GameLogic()
+        gamelogic = GameLogic()
+        buildingmanager = BuildingManager(gamelogic)
+        gui = GUI(gamelogic)
     
     
 # Class containing the GUI definitions for tkinter and ttk.    
 class GUI(Frame):
-    def __init__(self, parent):
+    def __init__(self, parent, gamelogic):
         # Creates the main frame and background color.
         Frame.__init__(self, parent, background = "#d9d9d9")
         self.parent = parent
@@ -20,8 +22,8 @@ class GUI(Frame):
         #self.style.configure("TButton", padding = (0, 2, 0, 0), font = "TkFixedFont")
         
         self.initUI()
-        self.gamelogic = GameLogic()
-        self.buildings = Buildings(self.gamelogic)
+        gamelogic = GameLogic
+        self.buildings = BuildingManager(self.gamelogic)
         
         # List buildings you can build.
         self.buildingsListbox = Listbox(self, height = 13, background = "white", listvariable = self.buildings.buildingsStringVar)
@@ -187,7 +189,7 @@ class GameLogic():
                 print("Turns left for current building: ", self.turns_left_current_building)
             else:
                 print(self.building_queue)
-                Buildings.add_built(Buildings.currently_building)
+                BuildingManager.add_built(BuildingManager.currently_building)
             if self.turns_left > 1:
                 self.turns_left -= 1
                 self.turns_leftStringVar.set("Turns left: %s" % self.turns_left)
@@ -221,16 +223,16 @@ class GameLogic():
     def set_turns_left_current_building(self):
         turn_amount = 0
         print(self.building_queue)
-        Buildings.currently_building_index = len(self.building_queue) - 1
+        BuildingManager.currently_building_index = len(self.building_queue) - 1
         if self.building_queue:
             if self.turns_left_current_building <= 1:
-                self.turns_left_current_building = Buildings.buildings_dict[self.building_queue[Buildings.currently_building_index]]
+                self.turns_left_current_building = BuildingManager.buildings_dict[self.building_queue[BuildingManager.currently_building_index]]
             for index, building in enumerate(self.building_queue):
                 print("Building index:", index, building)
-                if index != Buildings.currently_building_index:
-                    turn_amount += Buildings.buildings_dict.get(building)
+                if index != BuildingManager.currently_building_index:
+                    turn_amount += BuildingManager.buildings_dict.get(building)
                 elif len(self.building_queue) == 1:
-                    turn_amount += Buildings.buildings_dict.get(building)
+                    turn_amount += BuildingManager.buildings_dict.get(building)
                 else:
                     turn_amount += self.turns_left_current_building
         else:
@@ -250,19 +252,19 @@ class GameLogic():
                 self.turns_left -= self.turns_left_current_building
                 print("Removed %s turns." % self.turns_left_current_building)
                 self.turns_leftStringVar.set("Turns left: %s" % self.turns_left)
-                self.turns_left_current_building = Buildings.buildings_dict[self.building_queue[Buildings.currently_building_index]]
+                self.turns_left_current_building = BuildingManager.buildings_dict[self.building_queue[BuildingManager.currently_building_index]]
             else:
-                self.turns_left -= Buildings.buildings_dict.get(self.building_queue[selection_id])
+                self.turns_left -= BuildingManager.buildings_dict.get(self.building_queue[selection_id])
                 self.turns_leftStringVar.set("Turns left: %s" % self.turns_left)
             self.turns_leftStringVar.set("Turns left: %s" % self.turns_left)
             self.building_queue.remove(self.building_queue[selection_id])
             self.building_queueStringVar.set(self.building_queue)
             if len(self.building_queue)-1 > -1:
-                Buildings.currently_building = self.building_queue[len(self.building_queue)-1]
+                BuildingManager.currently_building = self.building_queue[len(self.building_queue) - 1]
             else:
                 self.turns_left_current_building = 0
             #print("self.turns_left -= self.turns_left_current_building: ", self.turns_left -= self.turns_left_current_building)
-            print("Buildings.buildings_list[selection_id]: ", Buildings.buildings_list[selection_id])
+            print("Buildings.buildings_list[selection_id]: ", BuildingManager.buildings_list[selection_id])
             print("selection and selection_id: ", selection, selection_id)
             #self.set_turns_left(turn_amount)
         else:
@@ -275,9 +277,9 @@ class GameLogic():
 
 
 
-class Buildings():
+class BuildingManager():
     def __init__(self, gamelogic):
-        self.gamelogic = GameLogic()
+        self.gamelogic = GameLogic
 
         self.air_purifiers_number = 0
         self.houses_number = 0

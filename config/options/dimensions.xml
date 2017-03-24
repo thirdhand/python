@@ -15,6 +15,9 @@
     <location key="SettingsEditor.0.0.1024.600" x="0" y="25" />
     <location key="FileChooserDialogImpl.0.0.1024.600" x="292" y="46" />
     <location key="MultipleFileMergeDialog.0.0.1920.1080" x="662" y="246" />
+    <location key="CommitChangelistDialog2.0.0.1024.600" x="0" y="25" />
+    <location key="Vcs.Push.Dialog.0.0.1024.600" x="327" y="27" />
+    <location key="git4idea.merge.GitPullDialog.0.0.1024.600" x="265" y="98" />
     <size key="GridCell.Tab.0.left.0.0.1920.1080" width="1373" height="262" />
     <size key="GridCell.Tab.0.center.0.0.1920.1080" width="1373" height="262" />
     <size key="GridCell.Tab.0.right.0.0.1920.1080" width="1373" height="262" />
@@ -31,5 +34,8 @@
     <size key="GridCell.Tab.0.right.0.0.1024.600" width="1001" height="127" />
     <size key="GridCell.Tab.0.bottom.0.0.1024.600" width="1001" height="127" />
     <size key="FileChooserDialogImpl.0.0.1024.600" width="428" height="513" />
+    <size key="CommitChangelistDialog2.0.0.1024.600" width="744" height="565" />
+    <size key="Vcs.Push.Dialog.0.0.1024.600" width="363" height="562" />
+    <size key="git4idea.merge.GitPullDialog.0.0.1024.600" width="493" height="421" />
   </component>
 </application>
