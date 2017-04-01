@@ -3,15 +3,18 @@ from tkinter import ttk
 
 
 
-class Init():
-    def __init__(self, Main, GameLogic):
-        Main()
-        gamelogic = GameLogic()
-        buildingmanager = BuildingManager(gamelogic)
-        gui = GUI(gamelogic)
-    
-    
-# Class containing the GUI definitions for tkinter and ttk.    
+def main():
+    root = Tk()
+    gamelogic = GameLogic()
+    buildingmanager = BuildingManager(gamelogic)
+    app = GUI(root, gamelogic)
+    root.mainloop()
+    # gui = GUI(gamelogic)
+
+
+
+
+# Class containing the GUI definitions for tkinter and ttk.
 class GUI(Frame):
     def __init__(self, parent, gamelogic):
         # Creates the main frame and background color.
@@ -20,10 +23,10 @@ class GUI(Frame):
         self.style = ttk.Style()
         self.style.theme_use("default")
         #self.style.configure("TButton", padding = (0, 2, 0, 0), font = "TkFixedFont")
-        
+
         self.initUI()
-        gamelogic = GameLogic
-        self.buildings = BuildingManager(self.gamelogic)
+        self.gamelogic = GameLogic()
+        self.buildings = BuildingManager(gamelogic)
         
         # List buildings you can build.
         self.buildingsListbox = Listbox(self, height = 13, background = "white", listvariable = self.buildings.buildingsStringVar)
@@ -160,6 +163,7 @@ class GUI(Frame):
 # Class containing the actual game logic.
 class GameLogic():
     def __init__(self):
+        self.buildingmanager = BuildingManager()
         self.turn = 0
         self.turns_left = 0
         self.turns_left_current_building = 0
@@ -226,7 +230,7 @@ class GameLogic():
         BuildingManager.currently_building_index = len(self.building_queue) - 1
         if self.building_queue:
             if self.turns_left_current_building <= 1:
-                self.turns_left_current_building = BuildingManager.buildings_dict[self.building_queue[BuildingManager.currently_building_index]]
+                self.turns_left_current_building = BuildingManager.buildings_dict[self.building_queue[self.buildingmanager.currently_building_index]]
             for index, building in enumerate(self.building_queue):
                 print("Building index:", index, building)
                 if index != BuildingManager.currently_building_index:
@@ -278,15 +282,15 @@ class GameLogic():
 
 
 class BuildingManager():
-    def __init__(self, gamelogic):
-        self.gamelogic = GameLogic
+    def __init__(self):
+        self.gamelogic = GameLogic()
 
         self.air_purifiers_number = 0
         self.houses_number = 0
         self.buildings_names = ""
         self.currently_building = ""
         # FIXME: self.currently_building_index appears to have a value of -1 since it's initialized before the fun starts.'
-        self.currently_building_index = len(GameLogic().building_queue)-1
+        self.currently_building_index = len(self.gamelogic.building_queue)-1
         self.buildings_list = sorted(["Air purifier", "Water purifier", "House", "Robot factory"])
         # Defining which buildings that can be built and how many turns they take to build.
         self.buildings_dict = {
@@ -328,11 +332,11 @@ class BuildingManager():
     def add_buildings(self, buildingsListbox):
         selection = buildingsListbox.curselection()
         selection_id = int(selection[0])
-        GameLogic().building_queue.insert(0, "%s" % (self.buildings_list[selection_id]))
-        GameLogic().building_queue.insert(0, "Test")
-        print("Building queue: ", GameLogic().building_queue)
-        self.currently_building = GameLogic().building_queue[len(GameLogic().building_queue)-1]
-        self.set_turns_left_current_building()
+        self.gamelogic.building_queue.insert(0, "%s" % (self.buildings_list[selection_id]))
+        self.gamelogic.building_queue.insert(0, "Test")
+        print("Building queue: ", self.gamelogic.building_queue)
+        self.currently_building = self.gamelogic.building_queue[len(self.gamelogic.building_queue)-1]
+        self.gamelogic.set_turns_left_current_building()
         GameLogic.building_queueStringVar.set(GameLogic.building_queue)
 
     # This defines what happens when finishing building something.
@@ -361,12 +365,6 @@ class BuildingManager():
             self.currently_building = None
 
 
-   
-def main():
-    root = Tk()
-    app = GUI(root)
-    root.mainloop()
-    
 
 
 if __name__ == "__main__":
