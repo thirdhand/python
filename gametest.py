@@ -29,30 +29,30 @@ class GUI(Frame):
         self.initUI()
         self.gamelogic = gamelogic
         self.buildings = BuildingManager(gamelogic)
-        
+
         # List buildings you can build.
         self.buildingsListbox = Listbox(self, height = 13, background = "white", listvariable = self.buildings.buildingsStringVar)
-        
+
         self.building_queueListbox = Listbox(self, height = 5, background = "white", listvariable = self.gamelogic.building_queueStringVar)
-        
+
         # A name entry widget which currently does not work correctly due to miscommunication between GUI and GameLogic.
         self.nameentry = ttk.Entry(self, textvariable = self.gamelogic.playernameStringVar)
-        
+
         # Hidden label to display the name entered in self.nameentry.
         self.saved_nameLabel = ttk.Label(self, textvariable = self.gamelogic.saved_playernameStringVar)
-        
+
         # Hidden label to display if an invalid name is entered in self.nameentry.
         self.error_playernameLabel = ttk.Label(self, foreground = "red", text = "Invalid name!")
-        
+
         self.UI_configuration()
-    
-        
+
+
     def initUI(self):
         self.parent.title("Gametest")
         self.pack(fill = BOTH, expand = True)
         self.centerWindow()
-        
-    # Creates the window in which the main frame and the rest is displayed. self.parent.geometry takes width, height, and then centers the window by checking for display resolution and then halving it to find the coordinates.   
+
+    # Creates the window in which the main frame and the rest is displayed. self.parent.geometry takes width, height, and then centers the window by checking for display resolution and then halving it to find the coordinates.
     def centerWindow(self):
         w = 640
         h = 480
@@ -61,25 +61,25 @@ class GUI(Frame):
         x = (sw - w)/2
         y = (sh - h)/2
         self.parent.geometry("%dx%d+%d+%d" % (w, h, x, y))
-        
+
     # Communication function between this GUI class and the GameLogic class.
     def add_buildings(self, buildingsListbox):
         self.buildings.add_buildings(self.buildingsListbox)
-        
+
     def remove_from_building_queue(self, building_queueListbox):
         self.gamelogic.remove_from_building_queue(self.building_queueListbox)
-        
+
     def set_building_description(self, buildingsListbox):
         self.buildings.set_building_description()
-        
-    # Communication function between this GUI class and the GameLogic class. Does not currently work as intended (the saved name is not displayed).    
+
+    # Communication function between this GUI class and the GameLogic class. Does not currently work as intended (the saved name is not displayed).
     def save_playername(self, saved_nameLabel, error_playernameLabel):
         self.gamelogic.save_playername(self.saved_nameLabel, self.error_playernameLabel)
-        
-    # Function with most of the widgets and their configuration.    
+
+    # Function with most of the widgets and their configuration.
     def UI_configuration(self):
         #time_leftMethod = time_left
-        
+
         # Adding columns and padding space.
         self.columnconfigure(0, pad = 2)
         self.columnconfigure(1, pad = 4)
@@ -100,9 +100,9 @@ class GUI(Frame):
         self.rowconfigure(5, pad = 3)
         self.rowconfigure(6, pad = 3)
 
-        
+
         # Creating UI elements and setting their parameters.
-        
+
         add_buildingsLabel = ttk.Label(self, text = "Add building")
         # Creating main buttons.
         button1 = ttk.Button(self, text = "Save name", command = self.save_playername)
@@ -110,30 +110,30 @@ class GUI(Frame):
         button3 = ttk.Button(self, text = "Build house", command = self.add_buildings)
         button4 = ttk.Button(self, text = "End turn", command = self.gamelogic.run_simulation)
         quitButton = ttk.Button(self, text = "Quit", command = self.quit)
-        
-        
+
+
         resources = ttk.Labelframe(self, text = "Resources", labelanchor = "nw", width = 150, height = 100)
         buildingsLabelframe = ttk.Labelframe(self, text = "Buildings", labelanchor = "nw", width = 100, height = 200)
         building_descriptionLabel = ttk.Label(self, textvariable = self.buildings.building_descriptionStringVar)
         #time_leftLabel = Label(self, textvariable = time_leftStringVar)
         turns_leftLabel = ttk.Label(self, textvariable = self.gamelogic.turns_leftStringVar)
         turns_left_current_buildingLabel = ttk.Label(self, textvariable = self.gamelogic.turns_left_current_buildingStringVar)
-        
+
         housesLabel = ttk.Label(buildingsLabelframe, textvariable = self.buildings.houses_numberStringVar)
         air_purifierLabel = ttk.Label(buildingsLabelframe, textvariable = self.buildings.air_purifiers_numberStringVar)
         turnLabel = ttk.Label(self, textvariable = self.gamelogic.turn_numberStringVar)
         building_queueLabel = ttk.Label(self, text = "Building queue")
         #building_queueStringVar.set(self.building_queue)
-        
+
         # Binding actions to elements.
         # Double-1 means double left click.
         self.buildingsListbox.bind("<Double-1>", self.add_buildings)
         self.buildingsListbox.bind("<1>", self.set_building_description)
         self.building_queueListbox.bind("<Double-1>", self.remove_from_building_queue)
-        
+
         # Placement of UI elements on the grid.
         self.grid(sticky = N + S + W + E)
-        
+
         add_buildingsLabel.grid(row = 0, column = 0, sticky = S)
         self.nameentry.grid(row = 9, column = 0, sticky = W)
         self.nameentry.focus()
@@ -142,7 +142,7 @@ class GUI(Frame):
         button3.grid(row = 9, column = 3)
         button4.grid(row = 9, column = 4)
         quitButton.grid(row = 9, column = 8, sticky = E)
-        
+
         self.buildingsListbox.grid(row = 1, column = 0, sticky = W)
         #resources.grid(row = 0, column = 8, sticky = W)
         buildingsLabelframe.grid(row = 1, column = 8, sticky = W)
@@ -160,8 +160,8 @@ class GUI(Frame):
         turns_left_current_buildingLabel.grid(row = 5, column = 0, sticky = W)
         emptylabel = ttk.Label(self, text = "")
         emptylabel.grid(row = 2, column = 8)
-   
-        
+
+
 # Class containing the actual game logic.
 class GameLogic():
     def __init__(self):
@@ -169,7 +169,7 @@ class GameLogic():
         self.turns_left = 0
         self.turns_left_current_building = 0
         self.building_queue = []
-        
+
         self.playernameStringVar = StringVar()
         self.saved_playernameStringVar = StringVar()
         self.turn_numberStringVar = StringVar()
@@ -185,7 +185,7 @@ class GameLogic():
         self.buildingmanager = buildingmanager
 
 
-    # This defines what happens when clicking End turn.    
+    # This defines what happens when clicking End turn.
     def run_simulation(self):
         if self.turn < 50:
             self.turn += 1
@@ -208,7 +208,7 @@ class GameLogic():
                 self.turns_leftStringVar.set("Queue empty")
                 print("Set turns left to 0")
 
-    # Logic for saving playername to labels in GUI.    
+    # Logic for saving playername to labels in GUI.
     def save_playername(self, saved_nameLabel, error_playernameLabel):
         saving_name = str(self.playernameStringVar.get())
         if saving_name != "":
@@ -218,7 +218,7 @@ class GameLogic():
         else:
             error_playernameLabel.grid()
             saved_nameLabel.grid_remove()
-            
+
     # Logic for displaying how many turns are left to build the whole building queue.
     def set_turns_left(self, turn_amount = 0):
         self.turns_left = turn_amount
@@ -227,8 +227,8 @@ class GameLogic():
             print("Turns left: ", self.turns_left)
         else:
             print("No more turns left.")
-            
-    # Logic for displaying how many turns are left building the foremost building in the queue.        
+
+    # Logic for displaying how many turns are left building the foremost building in the queue.
     def set_turns_left_current_building(self):
         turn_amount = 0
         print(self.building_queue)
@@ -248,7 +248,7 @@ class GameLogic():
             self.turns_left_current_building = 0
         self.turns_left_current_buildingStringVar.set("Turns left for\ncurrent building: %s" % self.turns_left_current_building)
         self.set_turns_left(turn_amount)
-    
+
     # Handles removal of buildings from building queue.
     def remove_from_building_queue(self, building_queueListbox):
         turn_amount = 0
@@ -288,6 +288,7 @@ class GameLogic():
 
 class BuildingManager():
     def __init__(self, gamelogic):
+        self.gamelogic = gamelogic
         self.air_purifiers_number = 0
         self.houses_number = 0
         self.buildings_names = ""
@@ -310,10 +311,6 @@ class BuildingManager():
         self.houses_numberStringVar = StringVar()
 
         self.set_buildings()
-
-
-    def set_gamelogic(self):
-        self.gamelogic = gamelogic
 
 
     # Populate the list of built buildings with building names in self.buildings_list.
