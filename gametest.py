@@ -10,6 +10,8 @@ def main():
     app = GUI(root, gamelogic)
     root.mainloop()
     # gui = GUI(gamelogic)
+    gamelogic.set_buildingmanager()
+    buildingmanager.set_gamelogic()
 
 
 
@@ -25,7 +27,7 @@ class GUI(Frame):
         #self.style.configure("TButton", padding = (0, 2, 0, 0), font = "TkFixedFont")
 
         self.initUI()
-        self.gamelogic = GameLogic()
+        self.gamelogic = gamelogic
         self.buildings = BuildingManager(gamelogic)
         
         # List buildings you can build.
@@ -163,7 +165,6 @@ class GUI(Frame):
 # Class containing the actual game logic.
 class GameLogic():
     def __init__(self):
-        self.buildingmanager = BuildingManager()
         self.turn = 0
         self.turns_left = 0
         self.turns_left_current_building = 0
@@ -178,6 +179,10 @@ class GameLogic():
         self.turns_leftStringVar = StringVar()
         self.turns_left_current_buildingStringVar = StringVar()
 
+
+
+    def set_buildingmanager(self):
+        self.buildingmanager = buildingmanager
 
 
     # This defines what happens when clicking End turn.    
@@ -282,9 +287,7 @@ class GameLogic():
 
 
 class BuildingManager():
-    def __init__(self):
-        self.gamelogic = GameLogic()
-
+    def __init__(self, gamelogic):
         self.air_purifiers_number = 0
         self.houses_number = 0
         self.buildings_names = ""
@@ -306,8 +309,12 @@ class BuildingManager():
         self.air_purifiers_numberStringVar = StringVar()
         self.houses_numberStringVar = StringVar()
 
-
         self.set_buildings()
+
+
+    def set_gamelogic(self):
+        self.gamelogic = gamelogic
+
 
     # Populate the list of built buildings with building names in self.buildings_list.
     def set_buildings(self):
