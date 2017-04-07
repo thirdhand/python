@@ -3,6 +3,7 @@ from tkinter import ttk
 
 
 
+
 def main():
     root = Tk()
     gamelogic = GameLogic()
@@ -13,9 +14,6 @@ def main():
     buildingmanager = BuildingManager(turnmanager, queuemanager)
     app = GUI(root, gamelogic, buildingmanager, queuemanager, turnmanager)
     root.mainloop()
-    # gui = GUI(gamelogic)
-    # gamelogic.set_buildingmanager()
-    # buildingmanager.set_gamelogic()
 
 
 
@@ -51,14 +49,17 @@ class GUI(Frame):
         self.error_playernameLabel = ttk.Label(self, foreground = "red", text = "Invalid name!")
         
         self.UI_configuration()
-    
-        
+
+
+
     def initUI(self):
         self.parent.title("Gametest")
         self.pack(fill = BOTH, expand = True)
         self.centerWindow()
         
-    # Creates the window in which the main frame and the rest is displayed. self.parent.geometry takes width, height, and then centers the window by checking for display resolution and then halving it to find the coordinates.   
+
+
+    # Creates the window in which the main frame and the rest is displayed. self.parent.geometry takes width, height, and then centers the window by checking for display resolution and then halving it to find the coordinates.
     def centerWindow(self):
         w = 640
         h = 480
@@ -68,6 +69,8 @@ class GUI(Frame):
         y = (sh - h)/2
         self.parent.geometry("%dx%d+%d+%d" % (w, h, x, y))
         
+
+
     # Communication function between this GUI class and the GameLogic class.
     def add_buildings(self, buildingsListbox):
         self.buildingmanager.add_buildings(self.buildingsListbox)
@@ -169,6 +172,8 @@ class GUI(Frame):
         emptylabel.grid(row = 2, column = 8)
 
 
+
+
 # Class containing the actual game logic.
 class GameLogic():
     def __init__(self):
@@ -188,6 +193,7 @@ class GameLogic():
     #     self.buildingmanager = buildingmanager
 
 
+
     # This defines what happens when clicking End turn.
     def run_simulation(self):
         if self.turn < 50:
@@ -195,6 +201,8 @@ class GameLogic():
             self.turn_numberStringVar.set("Turn %s" % self.turn)
             print("Turn", self.turn)
             #print("First in self.building_queue: %s" % self.building_queue[len(self.building_queue)-1], ", index", len(self.building_queue)-1)
+
+
 
     # Logic for saving playername to labels in GUI.
     def save_playername(self, saved_nameLabel, error_playernameLabel):
@@ -209,6 +217,7 @@ class GameLogic():
 
 
 
+
 class TurnManager():
     def __init__(self, buildingmanager, queuemanager):
         self.buildingmanager = buildingmanager
@@ -216,6 +225,8 @@ class TurnManager():
 
         self.turns_left_building_queue = 0
         self.turns_left_current_building = 0
+
+
 
     # Logic for displaying how many turns are left to build the whole building queue.
     def set_turns_left_building_queue(self, turn_amount=0):
@@ -225,6 +236,9 @@ class TurnManager():
             print("Turns left: ", self.turns_left_building_queue)
         else:
             print("No more turns left.")
+
+
+
 
     # Logic for displaying how many turns are left building the foremost building in the queue.
     def set_turns_left_current_building(self):
@@ -249,6 +263,8 @@ class TurnManager():
             "Turns left for\ncurrent building: %s" % self.turns_left_current_building)
         self.set_turns_left_building_queue(turn_amount)
 
+
+
     def decrease_queue_turns(self):
         if self.turns_left_current_building > 1:
             self.turns_left_current_building -= 1
@@ -270,10 +286,14 @@ class TurnManager():
             print("Set turns left to 0")
 
 
+
+
 class QueueManager():
     def __init__(self):
         self.building_queue = []
         self.building_queueStringVar = StringVar()
+
+
 
     # Handles removal of buildings from building queue.
     def remove_from_building_queue(self, building_queueListbox):
@@ -313,7 +333,6 @@ class QueueManager():
 
 
 
-
 class BuildingManager():
     def __init__(self, turnmanager, queuemanager):
         self.turnmanager = turnmanager
@@ -343,8 +362,10 @@ class BuildingManager():
         self.set_buildings()
 
 
+
     # def set_gamelogic(self):
     #     self.gamelogic = gamelogic
+
 
 
     # Populate the list of built buildings with building names in self.buildings_list.
@@ -360,11 +381,15 @@ class BuildingManager():
         # buildings_names_filtered = buildings_names_filtered.replace(",", "\n")
         # self.houses_numberStringVar.set(buildings_names_filtered)
 
+
+
     def set_building_description(self):
         # selection = buildingsListbox.curselection()
         # selection_id = int(selection[0])
 
         self.building_descriptionStringVar.set("Test2")
+
+
 
     # Controls what happens when double clicking an item in the building list.
     def add_buildings(self, buildingsListbox):
@@ -375,6 +400,8 @@ class BuildingManager():
         print("Building queue: ", self.queuemanager.building_queue)
         self.currently_building = self.queuemanager.building_queue[len(self.queuemanager.building_queue)-1]
         self.queuemanager.building_queueStringVar.set(self.queuemanager.building_queue)
+
+
 
     # This defines what happens when finishing building something.
     def add_built(self, currently_building):
