@@ -15,7 +15,7 @@ def main():
 
     queuemanager.set_buildingmanager(buildingmanager)
     queuemanager.set_turnmanager(turnmanager)
-    turnmanager.set_buildingmanager(turnmanager)
+    turnmanager.set_buildingmanager(buildingmanager)
     turnmanager.set_queuemanager(queuemanager)
     buildingmanager.set_turnmanager(turnmanager)
     buildingmanager.set_queuemanager(queuemanager)
@@ -133,8 +133,8 @@ class GUI(Frame):
         buildingsLabelframe = ttk.Labelframe(self, text = "Buildings", labelanchor = "nw", width = 100, height = 200)
         building_descriptionLabel = ttk.Label(self, textvariable = self.buildingmanager.building_descriptionStringVar)
         #time_leftLabel = Label(self, textvariable = time_leftStringVar)
-        turns_left_building_queueLabel = ttk.Label(self, textvariable = self.gamelogic.turns_left_building_queueStringVar)
-        turns_left_current_buildingLabel = ttk.Label(self, textvariable = self.gamelogic.turns_left_current_buildingStringVar)
+        turns_left_building_queueLabel = ttk.Label(self, textvariable = self.turnmanager.turns_left_building_queueStringVar)
+        turns_left_current_buildingLabel = ttk.Label(self, textvariable = self.turnmanager.turns_left_current_buildingStringVar)
 
         housesLabel = ttk.Label(buildingsLabelframe, textvariable = self.buildingmanager.houses_numberStringVar)
         air_purifierLabel = ttk.Label(buildingsLabelframe, textvariable = self.buildingmanager.air_purifiers_numberStringVar)
@@ -259,7 +259,7 @@ class TurnManager():
         if self.queuemanager.building_queue:
             if self.turns_left_current_building <= 1:
                 self.turns_left_current_building = self.buildingmanager.buildings_dict[
-                    self.building_queue[self.buildingmanager.currently_building_index]]
+                    self.queuemanager.building_queue[self.buildingmanager.currently_building_index]]
             for index, building in enumerate(self.queuemanager.building_queue):
                 print("Building index:", index, building)
                 if index != self.buildingmanager.currently_building_index:
@@ -359,8 +359,6 @@ class BuildingManager():
         self.houses_number = 0
         self.buildings_names = ""
         self.currently_building = ""
-        # FIXME: self.currently_building_index appears to have a value of -1 since it's initialized before the fun starts.'
-        self.currently_building_index = len(self.queuemanager.building_queue)-1
         self.buildings_list = sorted(["Air purifier", "Water purifier", "House", "Robot factory"])
         # Defining which buildings that can be built and how many turns they take to build.
         self.buildings_dict = {
@@ -385,6 +383,8 @@ class BuildingManager():
 
     def set_queuemanager(self, queuemanager):
         self.queuemanager = queuemanager
+        # FIXME: self.currently_building_index appears to have a value of -1 since it's initialized before the fun starts.'
+        self.currently_building_index = len(self.queuemanager.building_queue)-1
 
 
     # def set_gamelogic(self):
