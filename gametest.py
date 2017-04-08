@@ -10,11 +10,18 @@ def main():
     # gamelogic = GameLogic()
     # buildingmanager = BuildingManager(gamelogic)
     queuemanager = QueueManager()
-    turnmanager = TurnManager(queuemanager)
-    buildingmanager = BuildingManager(turnmanager, queuemanager)
+    turnmanager = TurnManager()
+    buildingmanager = BuildingManager()
+
+    queuemanager.set_buildingmanager(buildingmanager)
+    queuemanager.set_turnmanager(turnmanager)
+    turnmanager.set_buildingmanager(turnmanager)
+    turnmanager.set_queuemanager(queuemanager)
+    buildingmanager.set_turnmanager(turnmanager)
+    buildingmanager.set_queuemanager(queuemanager)
+
     app = GUI(root, gamelogic, buildingmanager, queuemanager, turnmanager)
     root.mainloop()
-
 
 
 
@@ -184,9 +191,6 @@ class GameLogic():
         self.turn_numberStringVar = StringVar()
         self.turn_numberStringVar.set("Turn %s" % self.turn)
 
-        self.turns_left_building_queueStringVar = StringVar()
-        self.turns_left_current_buildingStringVar = StringVar()
-
 
 
     # def set_buildingmanager(self):
@@ -220,16 +224,18 @@ class GameLogic():
 
 class TurnManager():
     def __init__(self):
-
         self.turns_left_building_queue = 0
         self.turns_left_current_building = 0
 
+        self.turns_left_building_queueStringVar = StringVar()
+        self.turns_left_current_buildingStringVar = StringVar()
 
-    def set_buildingmanager(self):
+
+    def set_buildingmanager(self, buildingmanager):
         self.buildingmanager = buildingmanager
 
 
-    def set_queuemanager(self):
+    def set_queuemanager(self, queuemanager):
         self.queuemanager = queuemanager
 
 
@@ -299,11 +305,11 @@ class QueueManager():
         self.building_queueStringVar = StringVar()
 
 
-    def set_buildingmanager(self):
+    def set_buildingmanager(self, buildingmanager):
         self.buildingmanager = buildingmanager
 
 
-    def set_turnmanager(self):
+    def set_turnmanager(self, turnmanager):
         self.turnmanager = turnmanager
 
 
@@ -373,11 +379,11 @@ class BuildingManager():
         self.set_buildings()
 
 
-    def set_buildingmanager(self):
+    def set_turnmanager(self, turnmanager):
         self.turnmanager = turnmanager
 
 
-    def set_queuemanager(self):
+    def set_queuemanager(self, queuemanager):
         self.queuemanager = queuemanager
 
 
