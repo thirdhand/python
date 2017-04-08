@@ -219,13 +219,18 @@ class GameLogic():
 
 
 class TurnManager():
-    def __init__(self, buildingmanager, queuemanager):
-        self.buildingmanager = buildingmanager
-        self.queuemanager = queuemanager
+    def __init__(self):
 
         self.turns_left_building_queue = 0
         self.turns_left_current_building = 0
 
+
+    def set_buildingmanager(self):
+        self.buildingmanager = buildingmanager
+
+
+    def set_queuemanager(self):
+        self.queuemanager = queuemanager
 
 
     # Logic for displaying how many turns are left to build the whole building queue.
@@ -294,6 +299,14 @@ class QueueManager():
         self.building_queueStringVar = StringVar()
 
 
+    def set_buildingmanager(self):
+        self.buildingmanager = buildingmanager
+
+
+    def set_turnmanager(self):
+        self.turnmanager = turnmanager
+
+
 
     # Handles removal of buildings from building queue.
     def remove_from_building_queue(self, building_queueListbox):
@@ -334,9 +347,7 @@ class QueueManager():
 
 
 class BuildingManager():
-    def __init__(self, turnmanager, queuemanager):
-        self.turnmanager = turnmanager
-        self.queuemanager = queuemanager
+    def __init__(self):
 
         self.air_purifiers_number = 0
         self.houses_number = 0
@@ -361,6 +372,13 @@ class BuildingManager():
 
         self.set_buildings()
 
+
+    def set_buildingmanager(self):
+        self.turnmanager = turnmanager
+
+
+    def set_queuemanager(self):
+        self.queuemanager = queuemanager
 
 
     # def set_gamelogic(self):
